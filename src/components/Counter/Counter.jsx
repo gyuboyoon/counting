@@ -1,4 +1,7 @@
-import { useState, memo } from "react";
+import { useState, memo, useCallback, useMemo } from "react";
+
+// memo 는 컴포넌트 함수를 감싸는데 사용
+// useMemo는 컴포넌트 함수 안에 있는 일반 함수들을 감싸고 그들의 실행을 방지한다., 복잡한 계산이 있을 때만 사용해야 한다.
 
 import IconButton from "../UI/IconButton.jsx";
 import MinusIcon from "../UI/Icons/MinusIcon.jsx";
@@ -37,17 +40,20 @@ function isPrime(number) {
 // 항상 속성을 바꿔야 하기 때문이다. 그래서 이 비교는 항상 모든 컴포넌트 함수가 실행되어야 한다는 결과를 도출하게 된다.
 const Counter = memo(function Counter({ initialCount }) {
   log("<Counter /> rendered", 1);
-  const initialCountIsPrime = isPrime(initialCount);
+  const initialCountIsPrime = useMemo(
+    () => isPrime(initialCount),
+    [initialCount]
+  );
 
   const [counter, setCounter] = useState(initialCount);
 
-  function handleDecrement() {
+  const handleDecrement = useCallback(function handleDecrement() {
     setCounter((prevCounter) => prevCounter - 1);
-  }
+  }, []);
 
-  function handleIncrement() {
+  const handleIncrement = useCallback(function handleIncrement() {
     setCounter((prevCounter) => prevCounter + 1);
-  }
+  }, []);
 
   return (
     <section className="counter">
