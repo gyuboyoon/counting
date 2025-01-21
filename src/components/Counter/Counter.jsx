@@ -41,15 +41,25 @@ function isPrime(number) {
 // 항상 속성을 바꿔야 하기 때문이다. 그래서 이 비교는 항상 모든 컴포넌트 함수가 실행되어야 한다는 결과를 도출하게 된다.
 const Counter = memo(function Counter({ initialCount }) {
   log("<Counter /> rendered", 1);
+
   const initialCountIsPrime = useMemo(
     () => isPrime(initialCount),
     [initialCount]
   );
 
+  // useEffect(() => {
+  //   setCounterChanges([{ value: initialCount, id: Math.random() * 1000 }]);
+  // }, [initialCount]);
+
   // const [counter, setCounter] = useState(initialCount);
   const [counterChanges, setCounterChanges] = useState([
     { value: initialCount, id: Math.random() * 1000 },
   ]);
+
+  const currentCounter = counterChanges.reduce(
+    (prevCounter, counterChanges) => prevCounter + counterChanges.value,
+    0
+  );
 
   const handleDecrement = useCallback(function handleDecrement() {
     // setCounter((prevCounter) => prevCounter - 1);
@@ -77,7 +87,7 @@ const Counter = memo(function Counter({ initialCount }) {
         <IconButton icon={MinusIcon} onClick={handleDecrement}>
           Decrement
         </IconButton>
-        <CounterOutput value={counter} />
+        <CounterOutput value={currentCounter} />
         <IconButton icon={PlusIcon} onClick={handleIncrement}>
           Increment
         </IconButton>

@@ -23,9 +23,11 @@ export default function CounterHistory({ history }) {
 
   return (
     <ol>
-      {history.map((count, index) => (
-        <HistoryItem key={index} count={count} />
+      {history.map((count) => (
+        <HistoryItem key={count.id} count={count.value} />
+        // 키가 list(<li>)에서 유용한 이유
         // 리액트에서 key는 상태를 구체적인 컴포넌트 인스턴스에 매핑할 때 고려되는 다른 요소이다.
+        // 키값이 있으면 state가 건너뛰는것을 방지할 수 있다. = 다른 요소들은 업데이트 되지않고 필요한 요소만 업데이트 된다.
       ))}
     </ol>
   );

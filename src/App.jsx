@@ -12,6 +12,10 @@ function App() {
 
   function handleSetCount(newCount) {
     setChosenCount(newCount);
+    setChosenCount((prevChosesnCount) => prevChosesnCount + 1);
+
+    // state batching => 같은 함수 내에서 여러 state 업데이트가 있을 때 다같이 배칭되어서 한번의 컴포넌트 함수 실행을 유도한다.
+    console.log(chosenCount);
   }
 
   return (
@@ -19,7 +23,8 @@ function App() {
       <Header />
       <main>
         <CounterConfigure onSet={handleSetCount} />
-        <Counter initialCount={chosenCount} />
+        <Counter key={chosenCount} initialCount={chosenCount} />
+        <Counter initialCount={0} />
       </main>
     </>
   );
